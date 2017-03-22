@@ -16,7 +16,7 @@ print("ip:", SERVER_HOST)
 SERVER_ADDR = (SERVER_HOST, PORT)
 
 
-class ChatServer(threading.Thread):
+class RobotServer(threading.Thread):
 
     CLIENT_CMND_LENGTH = 2
     TOTAL_MSG_LEN = 10
@@ -94,7 +94,7 @@ class ChatServer(threading.Thread):
                             break
                         else:
                             self.connections.append(client_sock)
-                            self.connected_address = client_addr # clunky fix, doesnt work for more than one client
+                            # self.connected_address = client_addr # clunky fix, doesnt work for more than one client
                             print("New client found at (%s, %s)" % client_addr)
 
                     # else is a client socket connection and we try and receive data from client
@@ -121,7 +121,7 @@ class ChatServer(threading.Thread):
 
 if __name__ == '__main__':
 
-    server = ChatServer()
+    server = RobotServer()
     server.run()
     server.sock.close()   # close socket
 

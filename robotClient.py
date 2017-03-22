@@ -38,7 +38,7 @@ class ChatClient():
         self.answer = input("Would you like to start up the Server? (Y/N): ")
         if self.answer == 'Y':
             self.start_freq = input("Enter a data receive frequency between 1 and 50: ")
-            while (self.start_freq < 1) | (self.start_freq > 50):
+            while (self.start_freq < 1) | (self.start_freq > 50) | is:
                 self.start_freq = input("Error: Enter a data receive frequency between 1 and 50: ")
             print("Ready to receive messages from LattePanda w/ IP", SERVER_HOST,
                   "on Port", PORT, "at", self.start_freq, "Hz")
@@ -58,27 +58,12 @@ class ChatClient():
 
 
     # separately threaded receive function
-    def receive(self):
-        if not TRANSFER_MODE:
-            while True:
-                reply_pckt = self.sock.recv(1024)
-                if not reply_pckt:
-                    sys.exit()
-                # Unpack data and address into username, message, IP, port
-                friend = reply_pckt[:13].decode('utf-8')
-                reply = reply_pckt[14:].decode('utf-8')
-                # ipAddr = str(address[0])  # optional unpacking of address (get addr from recv above)
-                # port = str(address[1])
-                print(str(friend) + ": " + str(reply))
-                upload = input('Do you want to upload a file? (Y/N): ')
-                if upload == 'Y':
-                    filename = input('Please enter the file name to be uploaded to the server: ')
-                    if os.path.isfile(filename):
-                        self.file_transfer(filename)  # transfer file
-        else:
-            filename = input('Please enter the file name to be uploaded to the server: ')
-            if os.path.isfile(filename):
-                self.file_transfer(filename)
+    def receive():
+        while True:
+            data = self.sock.recv(1024)
+            if not data: sys.exit(0)
+            print(data)
+
 
     def change_freq(self):
         freq = input("Enter a data receive frequency between 1 and 50: ")
@@ -103,7 +88,7 @@ class ChatClient():
 if __name__ == '__main__':
 
     # Command line arguments specify mode, host, port.
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print("Usage: <Server IP> <Server Port>")
     else:
 
@@ -113,6 +98,5 @@ if __name__ == '__main__':
         print(PORT)
 
     client = ChatClient()
-    client.run()
-    # threading.Thread(target=client.receive).start()
-    # threading.Thread(target=client.run).start()
+    threading.Thread(target=client.receive()).start()
+    threading.Thread(target=client).start()
