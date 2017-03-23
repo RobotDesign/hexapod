@@ -60,7 +60,7 @@ function recv_data(sock)
 %         bytesAvailable = sock.BytesAvailable;
         fprintf('%d Bytes Available in Buffer\n', sock.bytesAvailable);
         if sock.bytesAvailable > 0
-            data = fread(sock, sock.bytesAvailable);
+            data = fread(sock, sock.bytesAvailable, 'uint16');
             arr=sprintf('%u ', data);
             fprintf('Data: %s\n', arr)
         end
